@@ -62,6 +62,18 @@ export LD_LIBRARY_PATH=/app/.heroku/vendor/lib
 # Switch to the repo's context.
 cd $BUILD_DIR
 
+## <PHP-stuff>
+
+mkdir -p /app/.heroku/php
+
+PHP_VERSION="5.3.10"
+PHP_URL="https://s3.amazonaws.com/php-lp/php-$PHP_VERSION.tar.gz"
+echo "-----> Bundling PHP version $PHP_VERSION"
+curl --silent --max-time 60 --location "$PHP_URL" | tar xz -C /app/.heroku/php
+set-env PATH '$HOME/.heroku/php/bin:$PATH'
+
+## </PHP-stuff>
+
 # Experimental pre_compile hook.
 source $BIN_DIR/steps/hooks/pre_compile
 
