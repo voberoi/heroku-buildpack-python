@@ -167,9 +167,9 @@ fi
 
 # Nuke any requirements in always-nuke.txt file.
 
-if [ -f "always-nuke.txt.txt" ]; then
-   puts-step "Uninstalling private requirements from always-nuke.txt.txt"
-   cat always-nuke.txt.txt | while read requirement
+if [ -f "always-nuke.txt" ]; then
+   puts-step "Uninstalling private requirements from always-nuke.txt"
+   cat always-nuke.txt | while read requirement
    do
        pip uninstall -y $requirement || true
    done
