@@ -154,6 +154,17 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
+
+if [ -n $CLEAN_VIRTUALENV ]; then
+  if [ "$CLEAN_VIRTUALENV" = "true" ]; then
+    puts-step "Uninstalling all packages (CLEAN_VIRTUALENV is true)"
+    pip freeze -l | awk '{print $NF}' | while read requirement
+    do
+        pip uninstall -y $requirement || true
+    done
+  fi
+fi
+
 puts-step "Installing dependencies using Pip (1.2.1)"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
