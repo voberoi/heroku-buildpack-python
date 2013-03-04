@@ -153,7 +153,7 @@ if (grep -Fiq "hg+" requirements.txt) then
   pip install --use-mirrors mercurial | cleanup | indent
 fi
 
-# Install dependencies with Pip.
+# Nuke the virtualenv if CLEAN_VIRTUALENV is set
 
 if [ -n $CLEAN_VIRTUALENV ]; then
   if [ "$CLEAN_VIRTUALENV" = "true" ]; then
@@ -164,6 +164,18 @@ if [ -n $CLEAN_VIRTUALENV ]; then
     done
   fi
 fi
+
+# Nuke any requirements in always-nuke.txt file.
+
+if [ -f "always-nuke.txt.txt" ]; then
+   puts-step "Uninstalling private requirements from always-nuke.txt.txt"
+   cat always-nuke.txt.txt | while read requirement
+   do
+       pip uninstall -y $requirement || true
+   done
+fi
+
+# Install dependencies with Pip.
 
 puts-step "Installing dependencies using Pip (1.2.1)"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
